@@ -6,11 +6,6 @@
 
 # Required variables
 
-variable "description" {
-  type        = string
-  description = "Instance description. (Example: App server for a cool purpose)"
-}
-
 variable "dns_zone_fqdn" {
   type        = string
   description = "The FQDN of the DNS managed zone (with or without trailing period) that the instance hostname should be added as an A record for. (Example: gitlabsandbox.cloud)"
@@ -46,6 +41,11 @@ variable "gcp_subnetwork" {
 }
 
 variable "short_name" {
+variable "instance_description" {
+  type        = string
+  description = "Instance description. (Example: App server for a cool purpose)"
+}
+
   type        = string
   description = "The short name (hostname) of the VM instance that will become an A record in the DNS zone that you specify. (Example: app1)"
 }
