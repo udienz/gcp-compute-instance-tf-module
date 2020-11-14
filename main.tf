@@ -11,8 +11,7 @@
 # the hostname (no decimal) and DNS record (decimal)
 
 locals {
-  instance_name = var.short_name
-  instance_fqdn = trimsuffix(trimsuffix("${var.short_name}.${var.dns_zone_fqdn}", ".."), ".")
+  instance_fqdn = trimsuffix(trimsuffix("${var.instance_name}.${var.dns_zone_fqdn}", ".."), ".")
 }
 
 # Create additional disk volume for instance
@@ -76,10 +75,10 @@ resource "google_compute_address" "external_ip" {
 
 # Create a Google Compute Engine VM instance
 resource "google_compute_instance" "instance" {
-  description         = var.description
+  description         = var.instance_description
   deletion_protection = var.gcp_deletion_protection
   hostname            = local.instance_fqdn
-  name                = var.short_name
+  name                = var.instance_name
   machine_type        = var.gcp_machine_type
   zone                = var.gcp_region_zone
 
