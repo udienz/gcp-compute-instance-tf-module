@@ -40,12 +40,12 @@ variable "gcp_subnetwork" {
   description = "The object or self link for the subnet created in the parent module (Example: google_compute_subnetwork.app_subnetwork.self_link)"
 }
 
-variable "short_name" {
 variable "instance_description" {
   type        = string
   description = "Instance description. (Example: App server for a cool purpose)"
 }
 
+variable "instance_name" {
   type        = string
   description = "The short name (hostname) of the VM instance that will become an A record in the DNS zone that you specify. (Example: app1)"
 }
