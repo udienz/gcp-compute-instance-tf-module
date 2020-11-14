@@ -54,6 +54,8 @@ resource "google_compute_address" "external_ip" {
   address_type = "EXTERNAL"
   description  = "External IP for ${var.description}"
   /*
+  # Although labels are supported according to the documentation, they were not
+  # working during tests, so they have been commented out for now.
   labels = {
     gl_env_type           = lookup(var.labels, "gl_env_type", "undefined")
     gl_env_name           = lookup(var.labels, "gl_env_name", "undefined")
