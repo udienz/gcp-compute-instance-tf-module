@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2020 GitLab.com / Sandbox Cloud / Terraform Modules / Google Cloud Platform (GCP) / Google Compute Engine (GCE)
+Copyright (c) 2020 GitLab Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
