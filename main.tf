@@ -140,9 +140,9 @@ resource "google_compute_instance" "instance" {
   # Tags in GCP are only used for network and firewall rules. Any metadata is
   # defined as a label (see above).
   tags = [
-    "${var.labels.gl_resource_group}",
-    "${var.labels.gl_resource_host}",
-    "${var.network_firewall_rule_tag}"
+    var.labels.gl_resource_group,
+    var.labels.gl_resource_host,
+    var.network_firewall_rule_tag
   ]
 
 }
