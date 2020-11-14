@@ -52,7 +52,7 @@ resource "google_compute_attached_disk" "attach_storage_disk" {
 # Create an external IP for the instance
 resource "google_compute_address" "external_ip" {
   address_type = "EXTERNAL"
-  description  = "External IP for ${var.description}"
+  description  = "External IP for ${var.instance_description}"
   /*
   # Although labels are supported according to the documentation, they were not
   # working during tests, so they have been commented out for now.
