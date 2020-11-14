@@ -57,46 +57,46 @@ data "google_dns_managed_zone" "dns_zone" {
 
 # Provision a compute instance
 module "{NAME}_instance" {
-    source = "modules/compute-instance/"
+  source = "git::https://gitlab.com/gitlab-com/sandbox-cloud/tf-modules/gcp/gce/gcp-compute-instance-tf-module.git"
 
-    # Required variables
-    dns_zone_fqdn        = data.google_dns_managed_zone.dns_zone.fqdn
-    dns_zone_name        = data.google_dns_managed_zone.dns_zone.name
-    gcp_machine_type     = "n1-standard-2"
-    gcp_project          = var.gcp_project
-    gcp_region           = var.gcp_region
-    gcp_region_zone      = var.gcp_region_zone
-    gcp_subnetwork       = data.google_compute_subnetwork.<< my_subnet_name >>.self_link
-    instance_description = "App server for a cool purpose"
-    instance_name        = "app1"
+  # Required variables
+  dns_zone_fqdn        = data.google_dns_managed_zone.dns_zone.fqdn
+  dns_zone_name        = data.google_dns_managed_zone.dns_zone.name
+  gcp_machine_type     = "n1-standard-2"
+  gcp_project          = var.gcp_project
+  gcp_region           = var.gcp_region
+  gcp_region_zone      = var.gcp_region_zone
+  gcp_subnetwork       = data.google_compute_subnetwork.<< my_subnet_name >>.self_link
+  instance_description = "App server for a cool purpose"
+  instance_name        = "app1"
 
-    # Optional variables with default values
-    disk_boot_size            = "10"
-    disk_storage_enabled      = "false"
-    disk_storage_size         = "100"
-    dns_create_record         = "true"
-    dns_ttl                   = "300"
-    gcp_deletion_protection   = "false"
-    gcp_image                 = "ubuntu-1804-lts"
-    network_firewall_rule_tag = "firewall-ssh-web"
+  # Optional variables with default values
+  disk_boot_size            = "10"
+  disk_storage_enabled      = "false"
+  disk_storage_size         = "100"
+  dns_create_record         = "true"
+  dns_ttl                   = "300"
+  gcp_deletion_protection   = "false"
+  gcp_image                 = "ubuntu-1804-lts"
+  network_firewall_rule_tag = "firewall-ssh-web"
 
-    # Labels for metadata and cost analytics
-    # The labels in this module are part of GitLab's internal infrastructure
-    # standards that are used for owner identification and cost allocation.
-    # https://about.gitlab.com/handbook/infrastructure-standards/labels-tags/
-    labels = {
-      "gl_env_type"           = "experiment"
-      "gl_env_name"           = "Cool Product - App Server"
-      "gl_env_continent"      = "america"
-      "gl_owner_email_handle" = "jmartin"
-      "gl_owner_timezone"     = "america-los_angeles"
-      "gl_entity"             = "allocate"
-      "gl_realm"              = "sandbox"
-      "gl_dept"               = "sales-cs"
-      "gl_dept_group"         = "sales-cs-sa-us-west"
-      "gl_resource_group"     = "app"
-      "gl_resource_host"      = "app1"
-    }
+  # Labels for metadata and cost analytics
+  # The labels in this module are part of GitLab's internal infrastructure
+  # standards that are used for owner identification and cost allocation.
+  # https://about.gitlab.com/handbook/infrastructure-standards/labels-tags/
+  labels = {
+    "gl_env_type"           = "experiment"
+    "gl_env_name"           = "Cool Product - App Server"
+    "gl_env_continent"      = "america"
+    "gl_owner_email_handle" = "jmartin"
+    "gl_owner_timezone"     = "america-los_angeles"
+    "gl_entity"             = "allocate"
+    "gl_realm"              = "sandbox"
+    "gl_dept"               = "sales-cs"
+    "gl_dept_group"         = "sales-cs-sa-us-west"
+    "gl_resource_group"     = "app"
+    "gl_resource_host"      = "app1"
+  }
 }
 ```
 
