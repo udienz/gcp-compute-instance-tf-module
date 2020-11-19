@@ -27,36 +27,38 @@ This Terraform module is designed to be used for creating a compute instance wit
 
 ### Example Usage
 
-```
+> All double bracket `{{strings}}` should be replaced based on your desired configuration while preserving the hyphen or underscores syntax in each example.
+
+```hcl
 # [my-project]/main.tf
 
 # Define the Google Cloud Provider
 provider "google" {
-  credentials = << See Documentation >>
+  credentials = file("./keys/gcp-service-account.json")
   project     = var.gcp_project
   version     = "~>3.47"
 }
 
 # Define the Google Cloud Provider with beta features
 provider "google-beta" {
-  credentials = << See Documentation >>
+  credentials = file("./keys/gcp-service-account.json")
   project     = var.gcp_project
   version     = "~>3.47"
 }
 
 # Get the existing network subnet
-data "google_compute_subnetwork" "<< my_subnet_name >>" {
-  name   = "<< my-subnet-name >>"
+data "google_compute_subnetwork" "{{my_subnet_name}}" {
+  name   = "{{my-subnet-name}}"
   region = var.gcp_region
 }
 
 # Get the existing DNS zone
 data "google_dns_managed_zone" "dns_zone" {
-  name = "<< my-dns-zone-name >>"
+  name = "{{my-dns-zone-name}}"
 }
 
 # Provision a compute instance
-module "{NAME}_instance" {
+module "{{name}}_instance" {
   source = "git::https://gitlab.com/gitlab-com/sandbox-cloud/tf-modules/gcp/gce/gcp-compute-instance-tf-module.git"
 
   # Required variables
@@ -66,7 +68,7 @@ module "{NAME}_instance" {
   gcp_project          = var.gcp_project
   gcp_region           = var.gcp_region
   gcp_region_zone      = var.gcp_region_zone
-  gcp_subnetwork       = data.google_compute_subnetwork.<< my_subnet_name >>.self_link
+  gcp_subnetwork       = data.google_compute_subnetwork.{{my_subnet_name}}.self_link
   instance_description = "App server for a cool purpose"
   instance_name        = "app1"
 
@@ -100,7 +102,7 @@ module "{NAME}_instance" {
 }
 ```
 
-```
+```hcl
 # [my-project]/variables.tf
 
 variable "gcp_project" {
@@ -119,17 +121,17 @@ variable "gcp_region_zone" {
 }
 ```
 
-```
-[my-project]/outputs.tf
+```hcl
+# [my-project]/outputs.tf
 
 # This will return a map with all of the outputs for the module
-output "{NAME}_instance" {
-    value = module.{NAME}_instance
+output "{{name}}_instance" {
+    value = module.{{name}}_instance
 }
 
 # If you need a specific key as an output, you can use the dot notation shown above to access the map value.
-output "{NAME}_instance_external_ip" {
-    value = module.{NAME}_instance.network_external_ip
+output "{{name}}_instance_external_ip" {
+    value = module.{{name}}_instance.network_external_ip
 }
 ```
 
@@ -140,7 +142,7 @@ We use top-level variables where possible instead of maps to allow easier handli
 <table>
 <thead>
 <tr>
-    <th style="width: 25%;">Variable Key / Output Key</th>
+    <th style="width: 25%;">Variable Key</th>
     <th style="width: 40%;">Description</th>
     <th style="width: 10%;">Required</th>
     <th style="width: 25%;">Example Value</th>
@@ -327,36 +329,36 @@ We use top-level variables where possible instead of maps to allow easier handli
 
 ### Outputs
 
-You can see how each output is defined in [outputs.tf](outputs.tf).
+The outputs are returned as a map with sub arrays that use dot notation. You can see how each output is defined in [outputs.tf](outputs.tf).
 
-```
+```hcl
 # Get a map with all values for the module
-module.{NAME}_instance
+module.{{name}}_instance
 
 # Get individual values
-module.{NAME}_instance.disk_boot_size
-module.{NAME}_instance.disk_storage_enabled
-module.{NAME}_instance.disk_storage_size
-module.{NAME}_instance.dns_ttl
-module.{NAME}_instance.dns_zone_fqdn
-module.{NAME}_instance.dns_zone_name
-module.{NAME}_instance.dns_instance_fqdn
-module.{NAME}_instance.gcp_deletion_protection
-module.{NAME}_instance.gcp_image
-module.{NAME}_instance.gcp_machine_type
-module.{NAME}_instance.gcp_project
-module.{NAME}_instance.gcp_region
-module.{NAME}_instance.gcp_region_zone
-module.{NAME}_instance.instance_hostname
-module.{NAME}_instance.instance_description
-module.{NAME}_instance.instance_id
-module.{NAME}_instance.instance_name
-module.{NAME}_instance.instance_self_link
-module.{NAME}_instance.labels
-module.{NAME}_instance.network_external_ip
-module.{NAME}_instance.network_firewall_rule_tag
-module.{NAME}_instance.network_internal_ip
-module.{NAME}_instance.network_subnetwork
+module.{{name}}_instance.disk_boot.size
+module.{{name}}_instance.disk_storage.enabled
+module.{{name}}_instance.disk_storage.size
+module.{{name}}_instance.dns.ttl
+module.{{name}}_instance.dns.zone_fqdn
+module.{{name}}_instance.dns.zone_name
+module.{{name}}_instance.dns.instance_fqdn
+module.{{name}}_instance.gcp.deletion_protection
+module.{{name}}_instance.gcp.image
+module.{{name}}_instance.gcp.machine_type
+module.{{name}}_instance.gcp.project
+module.{{name}}_instance.gcp.region
+module.{{name}}_instance.gcp.region_zone
+module.{{name}}_instance.instance.description
+module.{{name}}_instance.instance.hostname
+module.{{name}}_instance.instance.id
+module.{{name}}_instance.instance.name
+module.{{name}}_instance.instance.self_link
+module.{{name}}_instance.labels
+module.{{name}}_instance.network.external_ip
+module.{{name}}_instance.network.firewall_rule_tag
+module.{{name}}_instance.network.internal_ip
+module.{{name}}_instance.network.subnetwork
 ```
 
 ### Authors and Maintainers
