@@ -4,6 +4,16 @@
 # main.tf
 ###############################################################################
 
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/google"
+      version = ">= 3.47"
+    }
+  }
+  required_version = ">= 0.13"
+}
+
 # The trimsuffix function is used to remove the trailing decimals from the FQDN
 # since some variables will include the DNS zone with a trailing period and
 # other variables may affix an extra decimal (two total). By removing the
