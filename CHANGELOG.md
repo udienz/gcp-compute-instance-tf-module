@@ -1,5 +1,22 @@
 # Compute Instance Terraform Module Changelog
 
+## 0.3.0
+
+This release increases the minimum Terraform version to v0.13 and removes the single version constraint to allow for v0.14+ usage.
+
+* [#7](https://gitlab.com/gitlab-com/sandbox-cloud/tf-modules/gcp/gce/gcp-compute-instance-tf-module/-/issues/7) - Update `README` to add HCL syntax highlighting in code blocks
+    * Update `README` to add hcl syntax highlighting to code blocks.
+    * Update `README` to change placeholder strings to use `{{string}}` syntax.
+    * Update `README` to fix outputs example to use dot notation based on array maps defined in `outputs.tf`.
+* [#8](https://gitlab.com/gitlab-com/sandbox-cloud/tf-modules/gcp/gce/gcp-compute-instance-tf-module/-/issues/8) - Update Terraform minimum version to v0.13
+    * **Breaking Change:** Updated required_version to >= 0.13.
+    * Update `main.tf` to add `terraform { ... }` block.
+    * Update `main.tf` to add `required_providers` block.
+    * Remove `versions.tf` and move `required_version` to `main.tf`. This fixes the bug with the `~> v0.12` constraint.
+    * Update `main.tf` to fix typo in `required_providers` with `aws` provider name instead of `google`
+    * Update `main.tf` to add `google_beta` to `required_providers` block.
+    * Update `README` to increase minimum Terraform version
+    * Update `README` to refactor `provider` and `required_providers` block with new v0.13 syntax
 
 ## 0.2.1
 
