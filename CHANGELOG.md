@@ -1,6 +1,13 @@
 # Compute Instance Terraform Module Changelog
 
 
+## 0.2.1
+
+This release fixes regressions from the v0.2.0 release.
+
+* [#5](https://gitlab.com/gitlab-com/sandbox-cloud/tf-modules/gcp/gce/gcp-compute-instance-tf-module/-/issues/5) - Fix regression with legacy description variable in external IP address configuration
+    Fix Error: `Reference to undeclared input variable` for `var.description` in `google_compute_address.external_ip`
+
 ## 0.2.0
 
 This release renames some variables and refactors the output maps. The README also has been updated with fixes.
