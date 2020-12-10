@@ -15,7 +15,9 @@ This Terraform module is designed to be used for creating a compute instance wit
 
 3. Add new variables in your Terraform repository that can be reused throughout your configuration. You can choose to <a target="_blank" href="https://www.terraform.io/docs/configuration/variables.html">add default values to each variable or use environment variables<a/>.
 
-4. Add the `google` and `google-beta` <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs">provider</a> to your environment configuration near the top of the file. Use `gcloud` or a service account for adding your credentials to your local environment.
+4. Add the `google` and `google-beta` providers to the `required_providers` block (introduced in Terraform v0.13).
+
+4. Add the `google` and `google-beta` <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs">providers</a> to your environment configuration near the top of the file. As of Terraform v0.13, the version number should be defined in `required_providers` and not in the `provider` block. Use `gcloud` or a service account for adding your credentials to your local environment.
 
 > It is important that you do not commit the service account `.json` file to your Git repository since this compromises your credentials.
 
@@ -32,18 +34,30 @@ This Terraform module is designed to be used for creating a compute instance wit
 ```hcl
 # [my-project]/main.tf
 
+terraform {
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = ">= 3.47"
+    }
+    google-beta = {
+      source  = "hashicorp/google-beta"
+      version = ">= 3.47"
+    }
+  }
+  required_version = ">= 0.13"
+}
+
 # Define the Google Cloud Provider
 provider "google" {
   credentials = file("./keys/gcp-service-account.json")
   project     = var.gcp_project
-  version     = "~>3.47"
 }
 
 # Define the Google Cloud Provider with beta features
 provider "google-beta" {
   credentials = file("./keys/gcp-service-account.json")
   project     = var.gcp_project
-  version     = "~>3.47"
 }
 
 # Get the existing network subnet
