@@ -4,8 +4,8 @@ This Terraform module is designed to be used for creating a compute instance wit
 
 ### Version Compatibility
 
-* Minimum Terraform v0.12
-* Tested and stable with v0.13
+* Minimum Terraform v0.13
+* Should be compatible with v0.14 based on [hashicorp/terraform CHANGELOG](https://github.com/hashicorp/terraform/blob/master/CHANGELOG.md)
 
 ### Prerequisites
 
