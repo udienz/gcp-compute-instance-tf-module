@@ -2,6 +2,10 @@
 
 This Terraform module is designed to be used for creating a compute instance with associated DNS record.
 
+The URL path to this module changed in v0.4.0.
+* Old Path: `https://gitlab.com/gitlab-com/sandbox-cloud/tf-modules/gcp/gce/gcp-compute-instance-tf-module`
+* New Path: `https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module`
+
 ### Version Compatibility
 
 * Minimum Terraform v0.13
@@ -73,7 +77,8 @@ data "google_dns_managed_zone" "dns_zone" {
 
 # Provision a compute instance
 module "{{name}}_instance" {
-  source = "git::https://gitlab.com/gitlab-com/sandbox-cloud/tf-modules/gcp/gce/gcp-compute-instance-tf-module.git"
+  source = "git::https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module.git?ref=latest"
+  # source = "git::https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module.git?ref=0.4.0"
 
   # Required variables
   dns_zone_fqdn        = data.google_dns_managed_zone.dns_zone.fqdn
