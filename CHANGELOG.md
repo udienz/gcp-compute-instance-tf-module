@@ -1,5 +1,7 @@
 # Compute Instance Terraform Module Changelog
 
+## 0.4.0
+
 ## 0.3.0
 
 This release increases the minimum Terraform version to v0.13 and removes the single version constraint to allow for v0.14+ usage.
