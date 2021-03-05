@@ -2,6 +2,15 @@
 
 ## 0.4.0
 
+This release updates the Git source path to this Terraform module since the GitLab.com project source path.
+
+* [#10](https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module/-/issues/10) - Update paths to project after GitLab group change
+  * **Breaking Change:** The URL path to this module has changed.
+    * Old Path: `gitlab-com/sandbox-cloud/tf-modules/gcp/gce/gcp-compute-instance-tf-module`
+    * New Path: `gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module`
+  * **Breaking Change:** Update `README` example usage `module source` to new path.
+  * Update `CHANGELOG` links to issues to use new path
+
 ## 0.3.0
 
 This release increases the minimum Terraform version to v0.13 and removes the single version constraint to allow for v0.14+ usage.
