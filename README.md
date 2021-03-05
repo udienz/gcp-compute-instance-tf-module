@@ -77,7 +77,7 @@ data "google_dns_managed_zone" "dns_zone" {
 
 # Provision a compute instance
 module "{{name}}_instance" {
-  source = "git::https://gitlab.com/gitlab-com/sandbox-cloud/tf-modules/gcp/gce/gcp-compute-instance-tf-module.git"
+  source = "git::https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module.git?ref=latest"
 
   # Required variables
   dns_zone_fqdn        = data.google_dns_managed_zone.dns_zone.fqdn
