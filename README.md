@@ -107,7 +107,7 @@ module "{{name}}_instance" {
   # https://about.gitlab.com/handbook/infrastructure-standards/labels-tags/
   labels = {
     "gl_env_type"           = "experiment"
-    "gl_env_name"           = "Cool Product - App Server"
+    "gl_env_name"           = "cool-product-app-server"
     "gl_env_continent"      = "america"
     "gl_owner_email_handle" = "jmartin"
     "gl_owner_timezone"     = "america-los_angeles"
@@ -322,7 +322,7 @@ We use top-level variables where possible instead of maps to allow easier handli
     <td>
         <code>{</code><br />
         <code>"gl_env_type"           = "experiment"</code><br />
-        <code>"gl_env_name"           = "Cool Product - App Server"</code><br />
+        <code>"gl_env_name"           = "cool-product-app-server"</code><br />
         <code>"gl_env_continent"      = "america"</code><br />
         <code>"gl_owner_email_handle" = "jmartin"</code><br />
         <code>"gl_owner_timezone"     = "america-los_angeles"</code><br />
