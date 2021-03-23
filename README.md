@@ -83,7 +83,7 @@ module "{{name}}_instance" {
   # Required variables
   dns_zone_fqdn        = data.google_dns_managed_zone.dns_zone.fqdn
   dns_zone_name        = data.google_dns_managed_zone.dns_zone.name
-  gcp_machine_type     = "n1-standard-2"
+  gcp_machine_type     = "e2-standard-2"
   gcp_project          = var.gcp_project
   gcp_region           = var.gcp_region
   gcp_region_zone      = var.gcp_region_zone
@@ -246,7 +246,7 @@ We use top-level variables where possible instead of maps to allow easier handli
     </td>
     <td>The <a target="_blank" href="https://cloud.google.com/compute/docs/machine-types">GCP machine type</a>.</td>
     <td><strong>Yes</strong></td>
-    <td><code>n1-standard-2</code></td>
+    <td><code>e2-standard-2</code></td>
 </tr>
 <tr>
     <td>

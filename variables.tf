@@ -18,7 +18,7 @@ variable "dns_zone_name" {
 
 variable "gcp_machine_type" {
   type        = string
-  description = "The GCP machine type (Example: n1-standard-2)"
+  description = "The GCP machine type (Example: e2-standard-2)"
 }
 
 variable "gcp_project" {

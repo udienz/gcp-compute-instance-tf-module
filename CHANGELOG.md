@@ -10,6 +10,7 @@ This release updates the Git source path to this Terraform module since the GitL
     * New Path: `gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module`
   * **Breaking Change:** Update `README` example usage `module source` to new path.
   * Update `CHANGELOG` links to issues to use new path
+* [#12](https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module/-/issues/12) - Change example usage GCP machine type from `n1-standard-2` to `e2-standard-2`.
 
 ## 0.3.0
 
