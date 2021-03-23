@@ -21,15 +21,17 @@ The URL path to this module changed in v0.4.0.
 
 4. Add the `google` and `google-beta` providers to the `required_providers` block (introduced in Terraform v0.13).
 
-4. Add the `google` and `google-beta` <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs">providers</a> to your environment configuration near the top of the file. As of Terraform v0.13, the version number should be defined in `required_providers` and not in the `provider` block. Use `gcloud` or a service account for adding your credentials to your local environment.
+5. In order to make requests against the GCP API, you need to authenticate to prove that it's you making the request. The preferred method of provisioning resources with Terraform is to use a GCP service account, a "robot account" that can be granted a limited set of IAM permissions. Use the [Terraform provider instructions](https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/getting_started#adding-credentials) for creating a service account using the Google Cloud Console or `gcloud` CLI tool.
 
-> It is important that you do not commit the service account `.json` file to your Git repository since this compromises your credentials.
+    > You can use the `GOOGLE_APPLICATION_CREDENTIALS` environment variable, however if you're working with multiple GCP projects you may find it easier to work use a key file in each of your repositories. In our examples, we use the `keys/gcp-service-account.json` file however you can name it whatever you would like (ex. my-project-name-a1b2c3d4.json).
 
-5. Create a <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_network">VPC network</a> and <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_subnetwork">subnetwork</a>. It is likely that the <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/compute_network">VPC already exists</a> and you can use an <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/compute_subnetwork">existing subnet</a> using the data source instead of declaring a new resource in your Terraform configuration.
+    > It is important that you do not commit the service account `.json` file to your Git repository since this compromises your credentials. You should add the `/keys` directory to your `.gitignore` file. See the `.gitignore.example` file in this module for example configuration.
 
-6. Get the <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/dns_managed_zone">existing GCP Cloud DNS zone</a>.
+6. Create a <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_network">VPC network</a> and <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_subnetwork">subnetwork</a>. It is likely that the <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/compute_network">VPC already exists</a> and you can use an <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/compute_subnetwork">existing subnet</a> using the data source instead of declaring a new resource in your Terraform configuration.
 
-7. Determine the instance name that uses alphanumeric characters and hyphens. (Example `app1`)
+7. Get the <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/dns_managed_zone">existing GCP Cloud DNS zone</a>.
+
+8. Determine the instance name that uses alphanumeric characters and hyphens. (Example `app1`)
 
 ### Example Usage
 
