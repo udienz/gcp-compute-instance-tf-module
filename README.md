@@ -1,161 +1,64 @@
-## GCP Terraform Module for Compute Instance with DNS Record
+# GCP Terraform Module for Compute Instance with DNS Record
 
 This Terraform module is designed to be used for creating a compute instance with associated DNS record.
 
-The URL path to this module changed in v0.4.0.
-* Old Path: `https://gitlab.com/gitlab-com/sandbox-cloud/tf-modules/gcp/gce/gcp-compute-instance-tf-module`
-* New Path: `https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module`
+## Table of Contents
 
-### Version Compatibility
+* [Version Compatibility](#version-compatibility)
+* [Usage Instructions](#usage-instructions)
+    * [Prerequisites](INSTALL.md#prerequisites)
+    * [Step-by-Step Instructions](INSTALL.md#step-by-step-instructions)
+    * [Variables, Outputs, and Additional Customization](INSTALL.md#variables-outputs-and-additional-customization)
+    * [Experiment Example](#experiment-example)
+    * [Placeholders Example](#placeholders-example)
+    <!--* [GitLab Demo Systems Example](#gitlab-demo-systems-example)-->
+    <!--* [GitLab Sandbox Cloud Example](#gitlab-sandbox-cloud-example)-->
+* [Variables](#variables)
+* [Outputs](#outputs)
+* [Authors and Maintainers](#authors-and-maintainers)
+
+## Version Compatibility
 
 * Minimum Terraform v0.13
-* Should be compatible with v0.14 based on [hashicorp/terraform CHANGELOG](https://github.com/hashicorp/terraform/blob/master/CHANGELOG.md)
+* Tested with Terraform v0.13, v0.14, v0.15
+* See the [hashicorp/terraform CHANGELOG](https://github.com/hashicorp/terraform/blob/master/CHANGELOG.md) for future breaking and deprecation changes
 
-### Prerequisites
+## Usage Instructions
 
-1. Create a Terraform Git repository or use an existing repository.
+See [INSTALL.md](INSTALL.md) for step-by-step instructions for using this Terraform module.
 
-2. Create a <a target="_blank" href="https://cloud.google.com/resource-manager/docs/creating-managing-projects">GCP project</a> and decide which <a target="_blank" href="https://cloud.google.com/compute/docs/regions-zones">region and zone</a> you will use.
+### Experiment Example
 
-3. Add new variables in your Terraform repository that can be reused throughout your configuration. You can choose to <a target="_blank" href="https://www.terraform.io/docs/configuration/variables.html">add default values to each variable or use environment variables<a/>.
+This example includes a basic configuration to get you started with using this module for the first time or a proof-of-concept use case.
+* [examples/experiment/main.tf](examples/experiment/main.tf)
+* [examples/experiment/outputs.tf](examples/experiment/outputs.tf)
+* [examples/experiment/terraform.tfvars.json](examples/experiment/terraform.tfvars.json)
+* [examples/experiment/variables.tf](examples/experiment/variables.tf)
 
-4. Add the `google` and `google-beta` providers to the `required_providers` block (introduced in Terraform v0.13).
+### Placeholders Example
 
-5. In order to make requests against the GCP API, you need to authenticate to prove that it's you making the request. The preferred method of provisioning resources with Terraform is to use a GCP service account, a "robot account" that can be granted a limited set of IAM permissions. Use the [Terraform provider instructions](https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/getting_started#adding-credentials) for creating a service account using the Google Cloud Console or `gcloud` CLI tool.
+This example includes bracket placeholders for you to easily copy and paste into your own environment configuration and start using this module for any use case.
+* [examples/placeholders/main.tf](examples/placeholders/main.tf)
+* [examples/placeholders/outputs.tf](examples/placeholders/outputs.tf)
+* [examples/placeholders/variables.tf](examples/placeholders/variables.tf)
 
-    > You can use the `GOOGLE_APPLICATION_CREDENTIALS` environment variable, however if you're working with multiple GCP projects you may find it easier to work use a key file in each of your repositories. In our examples, we use the `keys/gcp-service-account.json` file however you can name it whatever you would like (ex. my-project-name-a1b2c3d4.json).
+<!--
+### GitLab Demo Systems Example
 
-    > It is important that you do not commit the service account `.json` file to your Git repository since this compromises your credentials. You should add the `/keys` directory to your `.gitignore` file. See the `.gitignore.example` file in this module for example configuration.
+This example includes the best practice configuration that is used by the GitLab Demo Systems team for our infrastructure. You can use this to learn from, however the variables and configuration are customized for our environment and are not designed to be used outside of the demo systems environment. You should use the `Placeholders` example for implementing this module in your environment.
+* [examples/gitlab-demo-systems/main.tf](examples/gitlab-demo-systems/main.tf)
+* [examples/gitlab-demo-systems/outputs.tf](examples/gitlab-demo-systems/outputs.tf)
+* [examples/gitlab-demo-systems/variables.tf](examples/gitlab-demo-systems/variables.tf)
 
-6. Create a <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_network">VPC network</a> and <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_subnetwork">subnetwork</a>. It is likely that the <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/compute_network">VPC already exists</a> and you can use an <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/compute_subnetwork">existing subnet</a> using the data source instead of declaring a new resource in your Terraform configuration.
+### GitLab Sandbox Cloud Example
 
-7. Get the <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/dns_managed_zone">existing GCP Cloud DNS zone</a>.
+This example includes the best practice configuration for GitLab team members that are using the GitLab Sandbox Cloud with their own GCP project. This has been customized with the GitLab infrastructure standards labels configuration. You should use the `Placeholders` example for implementing this module in your environment.
+* [examples/gitlab-sandbox-cloud/main.tf](examples/gitlab-sandbox-cloud/main.tf)
+* [examples/gitlab-sandbox-cloud/outputs.tf](examples/gitlab-sandbox-cloud/outputs.tf)
+* [examples/gitlab-sandbox-cloud/variables.tf](examples/gitlab-sandbox-cloud/variables.tf)
+-->
 
-8. Determine the instance name that uses alphanumeric characters and hyphens. (Example `app1`)
-
-### Example Usage
-
-> All double bracket `{{strings}}` should be replaced based on your desired configuration while preserving the hyphen or underscores syntax in each example.
-
-```hcl
-# [my-project]/main.tf
-
-terraform {
-  required_providers {
-    google = {
-      source  = "hashicorp/google"
-      version = ">= 3.47"
-    }
-    google-beta = {
-      source  = "hashicorp/google-beta"
-      version = ">= 3.47"
-    }
-  }
-  required_version = ">= 0.13"
-}
-
-# Define the Google Cloud Provider
-provider "google" {
-  credentials = file("./keys/gcp-service-account.json")
-  project     = var.gcp_project
-}
-
-# Define the Google Cloud Provider with beta features
-provider "google-beta" {
-  credentials = file("./keys/gcp-service-account.json")
-  project     = var.gcp_project
-}
-
-# Get the existing network subnet
-data "google_compute_subnetwork" "{{my_subnet_name}}" {
-  name   = "{{my-subnet-name}}"
-  region = var.gcp_region
-}
-
-# Provision a compute instance
-module "{{name}}_instance" {
-  source = "git::https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module.git?ref=latest"
-  # source = "git::https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module.git?ref=0.4.0"
-
-  # Required variables
-  gcp_dns_zone_name    = var.gcp_dns_zone_name
-  gcp_machine_type     = "e2-standard-2"
-  gcp_project          = var.gcp_project
-  gcp_region           = var.gcp_region
-  gcp_region_zone      = var.gcp_region_zone
-  gcp_subnetwork       = data.google_compute_subnetwork.{{my_subnet_name}}.self_link
-  instance_description = "App server for a cool purpose"
-  instance_name        = "app1"
-
-  # Optional variables with default values
-  disk_boot_size            = "10"
-  disk_storage_enabled      = "false"
-  disk_storage_size         = "100"
-  dns_create_record         = "true"
-  dns_ttl                   = "300"
-  gcp_deletion_protection   = "false"
-  gcp_image                 = "ubuntu-1804-lts"
-  network_firewall_rule_tag = "firewall-ssh-web"
-
-  # Labels for metadata and cost analytics
-  # The labels in this module are part of GitLab's internal infrastructure
-  # standards that are used for owner identification and cost allocation.
-  # https://about.gitlab.com/handbook/infrastructure-standards/labels-tags/
-  labels = {
-    "gl_env_type"           = "experiment"
-    "gl_env_name"           = "cool-product-app-server"
-    "gl_env_continent"      = "america"
-    "gl_owner_email_handle" = "jmartin"
-    "gl_owner_timezone"     = "america-los_angeles"
-    "gl_entity"             = "allocate"
-    "gl_realm"              = "sandbox"
-    "gl_dept"               = "sales-cs"
-    "gl_dept_group"         = "sales-cs-sa-us-west"
-    "gl_resource_group"     = "app"
-    "gl_resource_host"      = "app1"
-  }
-}
-```
-
-```hcl
-# [my-project]/variables.tf
-
-variable "gcp_dns_zone_name" {
-  type        = string
-  description = "The GCP Cloud DNS zone name to create instance DNS A record in. This is not the FQDN. (Example: gitlab-sandbox-root-zone)"
-}
-
-variable "gcp_project" {
-  type        = string
-  description = "The GCP project ID that the instance is deployed in. (Example: my-project-name)"
-}
-
-variable "gcp_region" {
-  type        = string
-  description = "The GCP region that the resources will be deployed in. (Ex. us-east1)"
-}
-
-variable "gcp_region_zone" {
-  type        = string
-  description = "The GCP region availability zone that the resources will be deployed in. This must match the region. (Example: us-east1-c)"
-}
-```
-
-```hcl
-# [my-project]/outputs.tf
-
-# This will return a map with all of the outputs for the module
-output "{{name}}_instance" {
-    value = module.{{name}}_instance
-}
-
-# If you need a specific key as an output, you can use the dot notation shown above to access the map value.
-output "{{name}}_instance_external_ip" {
-    value = module.{{name}}_instance.network.external_ip
-}
-```
-
-### Variables
+## Variables
 
 We use top-level variables where possible instead of maps to allow easier handling of default values with partially defined maps, and reduce complexity for developers who are just getting started with Terraform syntax.
 
@@ -339,7 +242,7 @@ We use top-level variables where possible instead of maps to allow easier handli
 </tbody>
 </table>
 
-### Outputs
+## Outputs
 
 The outputs are returned as a map with sub arrays that use dot notation. You can see how each output is defined in [outputs.tf](outputs.tf).
 
@@ -374,6 +277,6 @@ module.{{name}}_instance.network.internal_ip
 module.{{name}}_instance.network.subnetwork
 ```
 
-### Authors and Maintainers
+## Authors and Maintainers
 
 * Jeff Martin / @jeffersonmartin / jmartin@gitlab.com
