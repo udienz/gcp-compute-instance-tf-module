@@ -18,14 +18,10 @@ terraform {
   required_version = ">= 0.13"
 }
 
-# The trimsuffix function is used to remove the trailing decimals from the FQDN
-# since some variables will include the DNS zone with a trailing period and
-# other variables may affix an extra decimal (two total). By removing the
-# decimals, we can have predictability and them in where appropriate for
-# the hostname (no decimal) and DNS record (decimal)
-
-locals {
-  instance_fqdn = trimsuffix(trimsuffix("${var.instance_name}.${var.dns_zone_fqdn}", ".."), ".")
+# Get the existing DNS zone
+data "google_dns_managed_zone" "dns_zone" {
+  count = var.dns_create_record ? 1 : 0
+  name  = var.gcp_dns_zone_name
 }
 
 # Create additional disk volume for instance
@@ -93,7 +89,7 @@ resource "google_compute_address" "external_ip" {
 resource "google_compute_instance" "instance" {
   description         = var.instance_description
   deletion_protection = var.gcp_deletion_protection
-  hostname            = local.instance_fqdn
+  hostname            = var.dns_create_record ? trimsuffix("${var.instance_name}.${data.google_dns_managed_zone.dns_zone[0].dns_name}", ".") : null
   name                = var.instance_name
   machine_type        = var.gcp_machine_type
   zone                = var.gcp_region_zone
@@ -165,8 +161,8 @@ resource "google_compute_instance" "instance" {
 resource "google_dns_record_set" "dns_record" {
   count = var.dns_create_record ? 1 : 0
 
-  managed_zone = var.dns_zone_name
-  name         = "${local.instance_fqdn}."
+  managed_zone = data.google_dns_managed_zone.dns_zone[0].name
+  name         = "${var.instance_name}.${data.google_dns_managed_zone.dns_zone[0].dns_name}"
   rrdatas      = [google_compute_address.external_ip.address]
   ttl          = var.dns_ttl
   type         = "A"

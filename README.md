@@ -72,19 +72,13 @@ data "google_compute_subnetwork" "{{my_subnet_name}}" {
   region = var.gcp_region
 }
 
-# Get the existing DNS zone
-data "google_dns_managed_zone" "dns_zone" {
-  name = "{{my-dns-zone-name}}"
-}
-
 # Provision a compute instance
 module "{{name}}_instance" {
   source = "git::https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module.git?ref=latest"
   # source = "git::https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module.git?ref=0.4.0"
 
   # Required variables
-  dns_zone_fqdn        = data.google_dns_managed_zone.dns_zone.fqdn
-  dns_zone_name        = data.google_dns_managed_zone.dns_zone.name
+  gcp_dns_zone_name    = var.gcp_dns_zone_name
   gcp_machine_type     = "e2-standard-2"
   gcp_project          = var.gcp_project
   gcp_region           = var.gcp_region
@@ -125,6 +119,11 @@ module "{{name}}_instance" {
 
 ```hcl
 # [my-project]/variables.tf
+
+variable "gcp_dns_zone_name" {
+  type        = string
+  description = "The GCP Cloud DNS zone name to create instance DNS A record in. This is not the FQDN. (Example: gitlab-sandbox-root-zone)"
+}
 
 variable "gcp_project" {
   type        = string
@@ -212,27 +211,19 @@ We use top-level variables where possible instead of maps to allow easier handli
 </tr>
 <tr>
     <td>
-        <code>dns_zone_fqdn</code>
-    </td>
-    <td>The FQDN of the <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/dns_managed_zone">DNS managed zone</a> (with or without trailing period) that the instance hostname should be added as an A record for.</td>
-    <td><strong>Yes</strong></td>
-    <td><code>gitlabsandbox.cloud</code></td>
-</tr>
-<tr>
-    <td>
-        <code>dns_zone_name</code>
-    </td>
-    <td>The name of the <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/dns_managed_zone">DNS managed zone</a> that the instance hostname should be added as an A record for. This is not the FQDN of the domain.</td>
-    <td><strong>Yes</strong></td>
-    <td><code>gitlab-sandbox-root-zone</code></td>
-</tr>
-<tr>
-    <td>
         <code>gcp_deletion_protection</code>
     </td>
     <td>Enable this to prevent Terraform from accidentally destroying the instance with terraform destroy command.</a></td>
     <td>No</td>
     <td><code>false</code> <small>(default)</small></td>
+</tr>
+<tr>
+    <td>
+        <code>gcp_dns_zone_name</code>
+    </td>
+    <td>The name of the <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/dns_managed_zone">DNS managed zone</a> that the instance hostname should be added as an A record for. This is not the FQDN of the domain.</td>
+    <td>No</td>
+    <td><code>gitlab-sandbox-root-zone</code></td>
 </tr>
 <tr>
     <td>
@@ -360,6 +351,7 @@ module.{{name}}_instance
 module.{{name}}_instance.disk_boot.size
 module.{{name}}_instance.disk_storage.enabled
 module.{{name}}_instance.disk_storage.size
+module.{{name}}_instance.dns.create_record
 module.{{name}}_instance.dns.ttl
 module.{{name}}_instance.dns.zone_fqdn
 module.{{name}}_instance.dns.zone_name
