@@ -6,14 +6,9 @@
 
 # Required variables
 
-variable "dns_zone_fqdn" {
+variable "gcp_dns_zone_name" {
   type        = string
-  description = "The FQDN of the DNS managed zone (with or without trailing period) that the instance hostname should be added as an A record for. (Example: gitlabsandbox.cloud)"
-}
-
-variable "dns_zone_name" {
-  type        = string
-  description = "The name of the DNS managed zone that the instance hostname should be added as an A record for. This is not the FQDN of the domain. (Example: gitlab-sandbox-root-zone)"
+  description = "The GCP Cloud DNS zone name to create instance DNS A record in. This is not the FQDN. (Example: gitlab-sandbox-root-zone)"
 }
 
 variable "gcp_machine_type" {

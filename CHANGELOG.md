@@ -10,6 +10,9 @@ This release updates the Git source path to this Terraform module since the GitL
     * New Path: `gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module`
   * **Breaking Change:** Update `README` example usage `module source` to new path.
   * Update `CHANGELOG` links to issues to use new path
+* [#11](https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module/-/issues/11) - Update DNS zone data source into module rather than in environment configuration
+  * **Breaking Change:** Renamed `dns_zone_name` variable to `gcp_dns_zone_name`. No changes to output key `dns.zone_name`.
+  * **Breaking Change:** Removed `dns_zone_fqdn` variable. Output key still exists at `dns.zone_fqdn`.
 * [#12](https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module/-/issues/12) - Update example usage GCP machine type from `n1-standard-2` to `e2-standard-2`.
 * [#14](https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module/-/issues/14) - Update README to add clarity on Terraform GCP provider authentication with environment variables and key files
 * [#15](https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module/-/issues/15) - Fix README with example usage label for `gl_env_name` to use alphadash syntax

@@ -21,9 +21,9 @@ output "dns" {
   value = {
     create_record = var.dns_create_record
     ttl           = var.dns_create_record ? var.dns_ttl : "null"
-    zone_fqdn     = var.dns_create_record ? var.dns_zone_fqdn : "null"
-    zone_name     = var.dns_create_record ? var.dns_zone_name : "null"
-    instance_fqdn = var.dns_create_record ? local.instance_fqdn : "null"
+    zone_fqdn     = var.dns_create_record ? data.google_dns_managed_zone.dns_zone[0].dns_name : "null"
+    zone_name     = var.dns_create_record ? data.google_dns_managed_zone.dns_zone[0].name : "null"
+    instance_fqdn = var.dns_create_record ? "${var.instance_name}.${data.google_dns_managed_zone.dns_zone[0].dns_name}" : "null"
   }
 }
 
