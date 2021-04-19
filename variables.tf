@@ -6,11 +6,6 @@
 
 # Required variables
 
-variable "gcp_dns_zone_name" {
-  type        = string
-  description = "The GCP Cloud DNS zone name to create instance DNS A record in. This is not the FQDN. (Example: gitlab-sandbox-root-zone)"
-}
-
 variable "gcp_machine_type" {
   type        = string
   description = "The GCP machine type (Example: e2-standard-2)"
@@ -81,6 +76,12 @@ variable "gcp_deletion_protection" {
   type        = bool
   description = "Enable this to prevent Terraform from accidentally destroying the instance with terraform destroy command. (Default: false)"
   default     = "false"
+}
+
+variable "gcp_dns_zone_name" {
+  type        = string
+  description = "The GCP Cloud DNS zone name to create instance DNS A record in. This is not the FQDN. (Example: gitlab-sandbox-root-zone)"
+  default     = null
 }
 
 variable "gcp_image" {
