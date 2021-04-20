@@ -243,9 +243,12 @@
       }
       "network" = {
         "external_ip" = "34.74.247.177"
-        "firewall_rule_tag" = "firewall-ssh-web"
         "internal_ip" = "10.142.0.7"
         "subnetwork" = "https://www.googleapis.com/compute/v1/projects/demosys-sandbox/regions/us-east1/subnetworks/default"
+        "tags" = [
+          "app1"
+          "firewall-ssh-web"
+        ]
       }
     }
     experiment_instance_external_ip = "34.74.247.177"

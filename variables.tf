@@ -90,6 +90,12 @@ variable "gcp_image" {
   default     = "ubuntu-1804-lts"
 }
 
+variable "gcp_network_tags" {
+  type        = list(any)
+  description = "A comma separated array of tags that should be applied to the GCP compute instance that are used for network and firewall rules."
+  default     = []
+}
+
 variable "gcp_preemptible" {
   type        = bool
   description = "Enable this to allow this instance to terminate for preemtible reasons. This can cause configuration and data loss. (Default: false)"
@@ -97,25 +103,7 @@ variable "gcp_preemptible" {
 }
 
 variable "labels" {
-  description = "Labels to place on the instance and child resources."
-  default = {
-    gl_realm              = "undefined"
-    gl_dept               = "undefined"
-    gl_dept_group         = "undefined"
-    gl_env_type           = "undefined"
-    gl_env_name           = "undefined"
-    gl_env_continent      = "undefined"
-    gl_owner_email_handle = "undefined"
-    gl_entity             = "undefined"
-    gl_resource_type      = "undefined"
-    gl_resource_group     = "undefined"
-    gl_resource_name      = "undefined"
-    gl_resource_group     = "undefined"
-  }
-}
-
-variable "network_firewall_rule_tag" {
-  type        = string
-  description = "Tag for the existing firewall rule set that you want to apply for ingress traffic. (Default: firewall-ssh-web)"
-  default     = "firewall-ssh-web"
+  type        = map(any)
+  description = "A single-level map/object with key value pairs of metadata labels to apply to the GCP resources. All keys should use underscores and values should use hyphens. All values must be wrapped in quotes."
+  default     = {}
 }

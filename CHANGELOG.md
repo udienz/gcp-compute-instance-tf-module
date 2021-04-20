@@ -1,9 +1,10 @@
 # Compute Instance Terraform Module Changelog
 
-## 0.4.0
+## 0.4.0 (2021-04-20)
 
-This release updates the Git source path to this Terraform module since the GitLab.com project source path.
+This release includes several major changes to make the Terraform module ready for production testing and general usage by the wider community outside of the GitLab Demo Systems.
 
+* Tests now performed with Terraform v0.13, v0.14, and v0.15.
 * [#10](https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module/-/issues/10) - Update paths to project after GitLab group change
   * **Breaking Change:** The URL path to this module has changed.
     * Old Path: `gitlab-com/sandbox-cloud/tf-modules/gcp/gce/gcp-compute-instance-tf-module`
@@ -14,11 +15,20 @@ This release updates the Git source path to this Terraform module since the GitL
   * **Breaking Change:** Renamed `dns_zone_name` variable to `gcp_dns_zone_name`. No changes to output key `dns.zone_name`.
   * **Breaking Change:** Removed `dns_zone_fqdn` variable. Output key still exists at `dns.zone_fqdn`.
 * [#12](https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module/-/issues/12) - Update example usage GCP machine type from `n1-standard-2` to `e2-standard-2`.
+* [#13](https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module/-/issues/12) - Refactor README example usage into examples/ directory structure to align with Terraform module best practices
 * [#14](https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module/-/issues/14) - Update README to add clarity on Terraform GCP provider authentication with environment variables and key files
 * [#15](https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module/-/issues/15) - Fix README with example usage label for `gl_env_name` to use alphadash syntax
 * [#16](https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module/-/issues/16) - Fix example usage outputs that is not a valid attribute of returned resource object
+* [#17](https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module/-/issues/17) - Remove GitLab infrastructure standards labels map from statically defined variables
+  * **Breaking Change:** Removed `network_firewall_rule_tag` string variable and replaced with `gcp_network_tags` list.
+    * The instance name is no longer automatically added as a label. It can be added to the `gcp_network_tags` list at your discretion.
+    * The `firewall-ssh-web` rule that was automatically applied to previous instances is no longer applied and is now considered a legacy implementation.
+    * The `network.firewall_rule_tag` output has been replaced with `network.tags` list (array).
+  * **Breaking Change:** Removed `gl_*` GitLab infrastructure standards metadata labels to allow any label schema. This allows the module to be used outside of GitLab.
+    * The `google_compute_disk.storage_disk` resource now uses `${var.instance_name}-storage-disk` label instead of `${var.gl_label.resource_host}-storage-disk`.
+    * The `google_compute_address.external_ip` resource now uses `${var.instance_name}-network-ip` label instead of `${var.gl_label.resource_host}-network-ip`.
 
-## 0.3.0
+## 0.3.0 (2020-12-10)
 
 This release increases the minimum Terraform version to v0.13 and removes the single version constraint to allow for v0.14+ usage.
 
@@ -36,14 +46,14 @@ This release increases the minimum Terraform version to v0.13 and removes the si
     * Update `README` to increase minimum Terraform version
     * Update `README` to refactor `provider` and `required_providers` block with new v0.13 syntax
 
-## 0.2.1
+## 0.2.1 (2020-11-14)
 
 This release fixes regressions from the v0.2.0 release.
 
 * [#5](https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module/-/issues/5) - Fix regression with legacy description variable in external IP address configuration
     Fix Error: `Reference to undeclared input variable` for `var.description` in `google_compute_address.external_ip`
 
-## 0.2.0
+## 0.2.0 (2020-11-14)
 
 This release renames some variables and refactors the output maps. The README also has been updated with fixes.
 
@@ -58,6 +68,6 @@ This release renames some variables and refactors the output maps. The README al
     * Changes 4-space indentation to 2-space in the example usage code block
 * [#4](https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module/-/issues/4) - Update `LICENSE.md` to change copyright owner from the project path to `GitLab Inc.`.
 
-## 0.1.0
+## 0.1.0 (2020-11-11)
 
 * Initial release with tested resources
