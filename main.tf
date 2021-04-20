@@ -28,24 +28,11 @@ data "google_dns_managed_zone" "dns_zone" {
 resource "google_compute_disk" "storage_disk" {
   count = var.disk_storage_enabled ? 1 : 0
 
-  labels = {
-    gl_env_type           = lookup(var.labels, "gl_env_type", "undefined")
-    gl_env_name           = lookup(var.labels, "gl_env_name", "undefined")
-    gl_env_continent      = lookup(var.labels, "gl_env_continent", "undefined")
-    gl_owner_email_handle = lookup(var.labels, "gl_owner_email_handle", "undefined")
-    gl_owner_timezone     = lookup(var.labels, "gl_owner_timezone", "undefined")
-    gl_entity             = lookup(var.labels, "gl_entity", "undefined")
-    gl_dept               = lookup(var.labels, "gl_dept", "undefined")
-    gl_dept_group         = lookup(var.labels, "gl_dept_group", "undefined")
-    gl_resource_group     = lookup(var.labels, "gl_resource_group", "undefined")
-    gl_resource_host      = lookup(var.labels, "gl_resource_host", "undefined")
-    gl_resource_name      = "${lookup(var.labels, "gl_resource_name", "undefined")}-storage-disk"
-    gl_resource_type      = "storage-disk"
-  }
-  name = "${var.labels.gl_resource_host}-storage-disk"
-  size = var.disk_storage_size
-  type = "pd-ssd"
-  zone = var.gcp_region_zone
+  labels = var.labels
+  name   = "${var.instance_name}-storage-disk"
+  size   = var.disk_storage_size
+  type   = "pd-ssd"
+  zone   = var.gcp_region_zone
 }
 
 # Attach additional disk to instance, so that we can move this
@@ -66,22 +53,9 @@ resource "google_compute_address" "external_ip" {
   /*
   # Although labels are supported according to the documentation, they were not
   # working during tests, so they have been commented out for now.
-  labels = {
-    gl_env_type           = lookup(var.labels, "gl_env_type", "undefined")
-    gl_env_name           = lookup(var.labels, "gl_env_name", "undefined")
-    gl_env_continent      = lookup(var.labels, "gl_env_continent", "undefined")
-    gl_owner_email_handle = lookup(var.labels, "gl_owner_email_handle", "undefined")
-    gl_owner_timezone     = lookup(var.labels, "gl_owner_timezone", "undefined")
-    gl_entity             = lookup(var.labels, "gl_entity", "undefined")
-    gl_dept               = lookup(var.labels, "gl_dept", "undefined")
-    gl_dept_group         = lookup(var.labels, "gl_dept_group", "undefined")
-    gl_resource_group     = lookup(var.labels, "gl_resource_group", "undefined")
-    gl_resource_host      = lookup(var.labels, "gl_resource_host", "undefined")
-    gl_resource_name      = "${lookup(var.labels, "gl_resource_name", "undefined")}-network-ip"
-    gl_resource_type      = "network-ip"
-  }
+  labels = var.labels
   */
-  name   = "${var.labels.gl_resource_host}-network-ip"
+  name   = "${var.instance_name}-network-ip"
   region = var.gcp_region
 }
 
@@ -104,20 +78,7 @@ resource "google_compute_instance" "instance" {
     auto_delete = "true"
   }
 
-  labels = {
-    gl_env_type           = lookup(var.labels, "gl_env_type", "undefined")
-    gl_env_name           = lookup(var.labels, "gl_env_name", "undefined")
-    gl_env_continent      = lookup(var.labels, "gl_env_continent", "undefined")
-    gl_owner_email_handle = lookup(var.labels, "gl_owner_email_handle", "undefined")
-    gl_owner_timezone     = lookup(var.labels, "gl_owner_timezone", "undefined")
-    gl_entity             = lookup(var.labels, "gl_entity", "undefined")
-    gl_dept               = lookup(var.labels, "gl_dept", "undefined")
-    gl_dept_group         = lookup(var.labels, "gl_dept_group", "undefined")
-    gl_resource_group     = lookup(var.labels, "gl_resource_group", "undefined")
-    gl_resource_host      = lookup(var.labels, "gl_resource_host", "undefined")
-    gl_resource_name      = "${lookup(var.labels, "gl_resource_name", "undefined")}-compute-instance"
-    gl_resource_type      = "compute-instance"
-  }
+  labels = var.labels
 
   # This ignored_changes is required since we use a separate resource for attaching the disk
   lifecycle {
@@ -149,11 +110,7 @@ resource "google_compute_instance" "instance" {
 
   # Tags in GCP are only used for network and firewall rules. Any metadata is
   # defined as a label (see above).
-  tags = [
-    var.labels.gl_resource_group,
-    var.labels.gl_resource_host,
-    var.network_firewall_rule_tag
-  ]
+  tags = var.gcp_network_tags
 
 }
 

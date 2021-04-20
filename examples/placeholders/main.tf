@@ -47,18 +47,19 @@ module "{{name}}_instance" {
   instance_name        = "{{name}}"
 
   # Optional variables with default values
-  disk_boot_size            = "10"
-  disk_storage_enabled      = "false"
-  disk_storage_size         = "100"
-  dns_create_record         = "true"
-  dns_ttl                   = "300"
-  gcp_deletion_protection   = "false"
-  gcp_dns_zone_name         = var.gcp_dns_zone_name
-  gcp_image                 = var.gcp_image
-  network_firewall_rule_tag = "{{firewall-rule-name}}"
+  disk_boot_size          = "10"
+  disk_storage_enabled    = "false"
+  disk_storage_size       = "100"
+  dns_create_record       = "true"
+  dns_ttl                 = "300"
+  gcp_deletion_protection = "false"
+  gcp_dns_zone_name       = var.gcp_dns_zone_name
+  gcp_image               = var.gcp_image
+  gcp_network_tags        = ["{{name}}", "{{firewall-rule-name}}"]
 
   # Labels for metadata and cost analytics
   labels = {
-    "{{label_key}}" = "{{label-value}}"
+    "{{label_key1}}" = "{{label-value1}}"
+    "{{label_key2}}" = "{{label-value2}}"
   }
 }
