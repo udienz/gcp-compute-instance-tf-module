@@ -12,8 +12,9 @@ output "disk_boot" {
 
 output "disk_storage" {
   value = {
-    enabled = var.disk_storage_enabled
-    size    = var.disk_storage_size
+    enabled    = var.disk_storage_enabled
+    mount_path = var.disk_storage_mount_path
+    size       = var.disk_storage_size
   }
 }
 

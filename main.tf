@@ -102,6 +102,13 @@ resource "google_compute_instance" "instance" {
   #   sshKeys = "ubuntu:${file("keys/${var.ssh_public_key}.pub")}"
   # }
 
+  # Execute the script to format & mount /var/opt
+  metadata = {
+    startup-script = var.disk_storage_enabled ? file("${path.module}/init/mnt_dir.sh") : null
+    MOUNT_DIR      = var.disk_storage_mount_path
+    REMOTE_FS      = "/dev/disk/by-id/google-storage-disk"
+  }
+
   scheduling {
     on_host_maintenance = "MIGRATE"
     automatic_restart   = var.gcp_preemptible ? "false" : "true"

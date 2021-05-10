@@ -1,5 +1,9 @@
 # Compute Instance Terraform Module Changelog
 
+## 0.5.0 (Unreleased)
+
+* [#19](https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module/-/issues/19) - Add init script to format and mount data disk
+
 ## 0.4.0 (2021-04-20)
 
 This release includes several major changes to make the Terraform module ready for production testing and general usage by the wider community outside of the GitLab Demo Systems.
