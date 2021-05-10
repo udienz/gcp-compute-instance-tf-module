@@ -54,6 +54,12 @@ variable "disk_storage_enabled" {
   default     = "false"
 }
 
+variable "disk_storage_mount_path" {
+  type        = string
+  description = "The Linux directory/path that the storage disk should be mounted to. This will depend on where your application and storage data resides by default. For GitLab Omnibus instances, this will reside in /var/opt, whereas Nginx sites may reside in /srv/www, and other applications may reside in /opt. The default value is chosen based on GitLab deployments being the primary use case of this module. (Default: /var/opt)"
+  default     = "/var/opt"
+}
+
 variable "disk_storage_size" {
   type        = string
   description = "The size in GB of the storage volume. (Default: 100)"

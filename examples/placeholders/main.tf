@@ -49,6 +49,7 @@ module "{{name}}_instance" {
   # Optional variables with default values
   disk_boot_size          = "10"
   disk_storage_enabled    = "false"
+  disk_storage_mount_path = "/var/opt"
   disk_storage_size       = "100"
   dns_create_record       = "true"
   dns_ttl                 = "300"
