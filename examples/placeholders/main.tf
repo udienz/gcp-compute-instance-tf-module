@@ -27,13 +27,13 @@ provider "google-beta" {
 }
 
 # Get the existing network subnet
-data "google_compute_subnetwork" "{{my_subnet_name}}" {
+data "google_compute_subnetwork" "example_subnet" {
   name   = "{{my-subnet-name}}"
   region = var.gcp_region
 }
 
 # Provision a compute instance
-module "{{name}}_instance" {
+module "example_instance" {
   source = "git::https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module.git"
   # source = "git::https://gitlab.com/gitlab-com/demo-systems/terraform-modules/gcp/gce/gcp-compute-instance-tf-module.git?ref=0.4.0"
 
@@ -42,9 +42,9 @@ module "{{name}}_instance" {
   gcp_project          = var.gcp_project
   gcp_region           = var.gcp_region
   gcp_region_zone      = var.gcp_region_zone
-  gcp_subnetwork       = data.google_compute_subnetwork.{{my_subnet_name}}.self_link
+  gcp_subnetwork       = data.google_compute_subnetwork.example_subnet.self_link
   instance_description = "{{A description for what this instance does}}"
-  instance_name        = "{{name}}"
+  instance_name        = "example"
 
   # Optional variables with default values
   disk_boot_size          = "10"
@@ -56,7 +56,7 @@ module "{{name}}_instance" {
   gcp_deletion_protection = "false"
   gcp_dns_zone_name       = var.gcp_dns_zone_name
   gcp_image               = var.gcp_image
-  gcp_network_tags        = ["{{name}}", "{{firewall-rule-name}}"]
+  gcp_network_tags        = ["example", "{{firewall-rule-name}}"]
 
   # Labels for metadata and cost analytics
   labels = {
