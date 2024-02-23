@@ -29,6 +29,10 @@ variable "gcp_region_zone" {
 variable "gcp_subnetwork" {
   description = "The object or self link for the subnet created in the parent module (Example: google_compute_subnetwork.app_subnetwork.self_link)"
 }
+variable "gcp_network_name" {
+  description = "VPC Name"
+  nullable = false
+}
 
 variable "instance_description" {
   type        = string
@@ -112,4 +116,10 @@ variable "labels" {
   type        = map(any)
   description = "A single-level map/object with key value pairs of metadata labels to apply to the GCP resources. All keys should use underscores and values should use hyphens. All values must be wrapped in quotes."
   default     = {}
+}
+
+variable "allocate_external_ip" {
+  type = bool
+  description = "True to allocate external IP, Default: false"
+  default = false
 }
