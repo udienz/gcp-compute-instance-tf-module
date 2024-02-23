@@ -17,13 +17,13 @@ terraform {
 # Define the Google Cloud Provider
 provider "google" {
   # credentials = file("./keys/gcp-service-account.json")
-  project     = var.gcp_project
+  project = var.gcp_project
 }
 
 # Define the Google Cloud Provider with beta features
 provider "google-beta" {
   # credentials = file("./keys/gcp-service-account.json")
-  project     = var.gcp_project
+  project = var.gcp_project
 }
 
 # Get the existing network subnet
