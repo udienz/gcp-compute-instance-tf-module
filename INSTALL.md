@@ -2,11 +2,68 @@
 
 ## Table of Contents
 
-* [Prerequisites](#prerequisites)
+* [Prerequisites for GitLab Sandbox Cloud Users](#prerequisites-for-gitlab-sandbox-cloud-users)
+* [Prerequisites for Open Source Users](#prerequisties-for-open-source-users)
 * [Step-by-Step Instructions](#step-by-step-instructions)
 * [Variables, Outputs, and Additional Customization](#variables-outputs-and-additional-customization)
 
-## Prerequisites
+## Prerequisites for GitLab Sandbox Cloud Users
+
+#### Access the GitOps Terraform repository
+
+1. Navigate to the [GitLab Sandbox Cloud](https://gitlabsandbox.cloud) Web UI and create a new Cloud Account (GCP project) or select your existing Cloud Account. 
+
+    > Each user only has one individual GCP project (Cloud Account), however multiple Terraform configurations ("Cloud Account Environments") are supported in the same GCP project to allow you to provision infrastructure for different purposes. 
+
+    > We also have group GCP projects that allow team members to collaborate with the same shared infrastructure. Each group GCP project is just like an individual GCP project and supports multiple Terraform configurations that are independent from your individual GCP project.
+
+2. In the GitLab Sandbox Cloud Web UI, select the `Getting Started` Cloud Account Environment or another Environment that you have created. If this is the first resource in a new Environment, you can create a new Cloud Account Environment (fresh Terraform configuration scaffolding) now before proceeding to the next step. 
+
+3. Click the `Access GitOps Repository` link and use the provided credentials to sign in.
+
+    > This is a self-manged GitLab Omnibus instance that has security hardening designed for Terraform CI pipelines. Each Cloud Account (GCP project) has a GitLab Group and each Cloud Account Environment (Terraform configuration) has a GitLab Project in that Group. 
+
+4. If you are not automatically redirected to the project due to authentication redirecting you to the dashboard, navigate to the `gcp` `>` `{username}-{id}` `>` `{environment}-{id}` GitLab project.
+
+#### Create an Issue and MR for the changes
+
+5. Create a new Issue titled `Add {Compute Instance Name} to Terraform configuration`. [GitLab Docs](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#accessing-the-new-issue-form)
+
+6. Create a **Merge Request** from the issue. [GitLab Docs](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-new-branch-from-an-issue)
+
+7. Open the **Web IDE** for the Merge Request. [GitLab Docs](https://docs.gitlab.com/ee/user/project/web_ide/#open-the-web-ide)
+
+    > For simplicity, these instructions use the Web IDE, however you can [configure your own SSH key](https://docs.gitlab.com/ee/ssh/#add-an-ssh-key-to-your-gitlab-account) and [clone the repository](https://docs.gitlab.com/ee/gitlab-basics/start-using-git.html#clone-with-ssh) to your machine to work with locally. 
+    
+    > Remember that all Terraform commands are run automatically by GitLab CI jobs (occurs automatically after commits and merges) and you should not type any `terraform [command]` on your local machine in your Terminal.
+
+#### Add the module to the Terraform configuration
+
+8. Navigate to and open the `main.tf` file in the Web IDE.
+
+9. Scroll down to the `Add your Terraform modules and/or resources below this line` section.
+
+10. In a separate browser tab, open the [gcp-compute-instance-tf-module:examples/experiment/main.tf](https://gitlab.com/gitlab-com/sandbox-cloud/terraform-modules/gcp/gcp-compute-instance-tf-module/-/blob/main/examples/sandbox-cloud/main.tf) file.
+
+11. Copy and paste the contents of the example `main.tf` file into the Web IDE.
+
+12. You can change any of the most of the variables that are strings (rendered in red in the Web IDE). You can see the [README.md#variables](https://gitlab.com/gitlab-com/sandbox-cloud/terraform-modules/gcp/gcp-compute-instance-tf-module/-/blob/main/README.md#variables) to learn more about expected values.
+
+13. Navigate to and open the `outputs.tf` file in the Web IDE.
+
+14. Scroll down to the `Add your Terraform modules and/or resources below this line` section.
+
+15. In a separate browser tab, open the [gcp-compute-instance-tf-module:examples/experiment/outputs.tf](https://gitlab.com/gitlab-com/sandbox-cloud/terraform-modules/gcp/gcp-compute-instance-tf-module/-/blob/main/examples/sandbox-cloud/outputs.tf) file.
+
+16. Copy and paste the contents of the example `outputs.tf` file into the Web IDE.
+
+17. Click the blue `Commit` button in the left sidebar to save your changes. You can leave the commit message at the default value or change it to something descriptive if you prefer.
+
+####
+
+18. Navigate to the Merge 
+
+When you create a Cloud Account, a "Getting Started" Cloud Account Environment is created that provides a Terraform configuration to help you get started easily. You can create additional Cloud Account Environments
 
 1. Create a Git repository for your Terraform project, or use an existing repository with your Terraform configuration. **For security reasons, it is imperative that your [GitLab](https://docs.gitlab.com/ee/public_access/public_access.html#how-to-change-project-visibility) or [GitHub](https://docs.github.com/en/github/administering-a-repository/setting-repository-visibility) project is a `private` project (not `public` or `internal`) to avoid leaking your infrastructure credentials.**
 
@@ -31,6 +88,34 @@
     ```
 
 1. Determine the instance name that uses alphanumeric characters and hyphens. (Example `app1`)
+
+
+## Prerequisites for Open Source Users
+
+1. Create a Git repository for your Terraform project, or use an existing repository with your Terraform configuration. **For security reasons, it is imperative that your [GitLab](https://docs.gitlab.com/ee/public_access/public_access.html#how-to-change-project-visibility) or [GitHub](https://docs.github.com/en/github/administering-a-repository/setting-repository-visibility) project is a `private` project (not `public` or `internal`) to avoid leaking your infrastructure credentials.**
+
+1. Create a <a target="_blank" href="https://cloud.google.com/resource-manager/docs/creating-managing-projects">GCP project</a> or use an existing GCP project. You will need to decide which <a target="_blank" href="https://cloud.google.com/compute/docs/regions-zones">region and zone</a> you will use. The examples in this module use `us-east1` and `us-east1-c`.
+
+1. In order to make requests against the GCP API, you need to authenticate to prove that it's you making the request. The preferred method of provisioning resources with Terraform is to use a GCP service account, which is a "robot account" that can be granted a limited set of IAM permissions. Use the [Terraform provider instructions](https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/getting_started#adding-credentials) for creating a service account using the Google Cloud Console or `gcloud` CLI tool.
+
+    > You can use the `GOOGLE_APPLICATION_CREDENTIALS` environment variable, however if you're working with multiple GCP projects you may find it easier to work use a key file in each of your repositories. In our examples, we use the `keys/gcp-service-account.json` file however you can name it whatever you would like (ex. my-project-name-a1b2c3d4.json).
+
+    > It is important that you do not commit the service account `.json` file to your Git repository since this compromises your credentials. You should add the `/keys` directory to your `.gitignore` file. See the `.gitignore.example` file in this module for example configuration.
+
+1. Create a <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_network">VPC network</a> and <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_subnetwork">subnetwork</a>. It is likely that the <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/compute_network">VPC already exists</a> and you can use an <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/compute_subnetwork">existing subnet</a> using the data source instead of declaring a new resource in your Terraform configuration.
+
+1. If you would like a DNS record to be created for the instance in GCP Cloud DNS, you will need to get the <a target="_blank" href="https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/dns_managed_zone">existing GCP Cloud DNS zone</a> or create a new DNS managed zone for a domain name that you own. If you are using AWS Route53 or another DNS service or this is for experimentation purposes only, you can set `dns_create_record` variable to `false` in the instance module block after copying the example from `main.tf`.
+
+    ```
+    module "{{name}}_instance" {
+      # ...
+      dns_create_record = "false"
+      # ...
+    }
+    ```
+
+1. Determine the instance name that uses alphanumeric characters and hyphens. (Example `app1`)
+
 
 ## Step-by-Step Instructions
 
