@@ -1,0 +1,5 @@
+releaseType: terraform-module
+handleGHRelease: true
+
+enabled: true
+always_check_pr_title: true
