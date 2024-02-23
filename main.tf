@@ -48,7 +48,7 @@ resource "google_compute_attached_disk" "attach_storage_disk" {
 
 # Create an external IP for the instance
 resource "google_compute_address" "external_ip" {
-  count = var.allocate_external_ip ? 1 :0
+  count = var.allocate_external_ip ? 1 : 0
 
   address_type = "EXTERNAL"
   description  = "External IP for ${var.instance_description}"
@@ -90,7 +90,7 @@ resource "google_compute_instance" "instance" {
   # Attach the primary network interface to the VM
   network_interface {
     subnetwork = var.gcp_subnetwork
-    network = var.gcp_network_name
+    network    = var.gcp_network_name
   }
 
   # This sets a custom SSH key on the instance and prevents the OS Login and GCP

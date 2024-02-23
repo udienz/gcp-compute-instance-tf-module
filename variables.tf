@@ -31,7 +31,7 @@ variable "gcp_subnetwork" {
 }
 variable "gcp_network_name" {
   description = "VPC Name"
-  nullable = false
+  nullable    = false
 }
 
 variable "instance_description" {
@@ -119,7 +119,7 @@ variable "labels" {
 }
 
 variable "allocate_external_ip" {
-  type = bool
+  type        = bool
   description = "True to allocate external IP, Default: false"
-  default = false
+  default     = false
 }
