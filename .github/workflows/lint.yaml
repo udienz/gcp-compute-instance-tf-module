@@ -32,4 +32,29 @@ jobs:
     runs-on: 'ubuntu-latest'
     steps:
       - uses: 'actions/checkout@v4'
-      - run: docker run --rm -v ${{ github.workspace }}:/workspace terraform validate .
+      - name: Setup terraform
+        uses: hashicorp/setup-terraform@v2
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+      - name: Create Comment with Terraform Plan
+        uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        id: comment
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Format and Style 🖌 \`${{ steps.fmt.outcome }}\`
+            #### Terraform Validation 🤖 \`${{ steps.validate.outcome }}\`
+
+            *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
