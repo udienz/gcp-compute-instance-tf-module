@@ -127,7 +127,7 @@ resource "google_dns_record_set" "dns_record" {
 
   managed_zone = data.google_dns_managed_zone.dns_zone[0].name
   name         = "${var.instance_name}.${data.google_dns_managed_zone.dns_zone[0].dns_name}"
-  rrdatas      = [google_compute_instance.instance.network_interface[0].network_ips]
+  rrdatas      = [google_compute_instance.instance.network_interface[0].network_ip]
   ttl          = var.dns_ttl
   type         = "A"
 }
