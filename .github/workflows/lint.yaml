@@ -20,7 +20,7 @@ name: 'lint'
 on:
   pull_request:
     branches:
-      - master
+      - main
 
 concurrency:
   group: '${{ github.workflow }}-${{ github.head_ref || github.ref }}'
@@ -32,16 +32,34 @@ jobs:
     runs-on: 'ubuntu-latest'
     steps:
       - uses: 'actions/checkout@v4'
-      - id: variables
+      - name: Terraform Init
+        id: init
         run: |
-          MAKEFILE=$(find . -name Makefile -print -quit)
-          if [ -z "$MAKEFILE" ]; then
-            echo dev-tools=gcr.io/cloud-foundation-cicd/cft/developer-tools:1 >> "$GITHUB_OUTPUT"
-          else
-            VERSION=$(grep "DOCKER_TAG_VERSION_DEVELOPER_TOOLS := " $MAKEFILE | cut -d\  -f3)
-            IMAGE=$(grep "DOCKER_IMAGE_DEVELOPER_TOOLS := " $MAKEFILE | cut -d\  -f3)
-            REGISTRY=$(grep "REGISTRY_URL := " $MAKEFILE | cut -d\  -f3)
-            echo dev-tools=${REGISTRY}/${IMAGE}:${VERSION} >> "$GITHUB_OUTPUT"
-          fi
-      - run: docker run --rm -v ${{ github.workspace }}:/workspace ${{ steps.variables.outputs.dev-tools }} module-swapper
-      - run: docker run --rm -v ${{ github.workspace }}:/workspace ${{ steps.variables.outputs.dev-tools }} /usr/local/bin/test_lint.sh
+          terraform init -input=false
+          terraform workspace show
+      - name: Setup terraform
+        uses: hashicorp/setup-terraform@v2
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+      - name: Create Comment with Terraform Plan
+        uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        id: comment
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Format and Style 🖌 \`${{ steps.fmt.outcome }}\`
+            #### Terraform Validation 🤖 \`${{ steps.validate.outcome }}\`
+
+            *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })

@@ -55,7 +55,6 @@ output "labels" {
 
 output "network" {
   value = {
-    external_ip = google_compute_address.external_ip.address
     internal_ip = google_compute_instance.instance.network_interface[0].network_ip
     subnetwork  = var.gcp_subnetwork
     tags        = var.gcp_network_tags
