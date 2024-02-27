@@ -123,3 +123,15 @@ variable "allocate_external_ip" {
   description = "True to allocate external IP, Default: false"
   default     = false
 }
+
+variable "startup_script" {
+  description = "User startup script to run when instances spin up"
+  type        = string
+  default     = ""
+}
+
+variable "desired_status" {
+  description = "Expected instance status when created"
+  type        = string
+  default     = "RUNNING"
+}

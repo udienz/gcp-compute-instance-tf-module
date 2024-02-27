@@ -69,6 +69,7 @@ resource "google_compute_instance" "instance" {
   name                = var.instance_name
   machine_type        = var.gcp_machine_type
   zone                = var.gcp_region_zone
+  desired_status      = var.desired_status
 
   # Base disk for the OS
   boot_disk {
@@ -104,7 +105,8 @@ resource "google_compute_instance" "instance" {
 
   # Execute the script to format & mount /var/opt
   metadata = {
-    startup-script = var.disk_storage_enabled ? file("${path.module}/init/mnt_dir.sh") : null
+    # startup-script = var.disk_storage_enabled ? file("${path.module}/init/mnt_dir.sh") : null
+    startup-script = var.startup_script
     MOUNT_DIR      = var.disk_storage_mount_path
     REMOTE_FS      = "/dev/disk/by-id/google-storage-disk"
   }
